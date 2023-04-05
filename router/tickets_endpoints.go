@@ -1,11 +1,11 @@
 package router
 
 import (
-	"awesomeProject1/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
+	"ukrabobus/models"
 )
 
 func GetAllTickets(db *gorm.DB) gin.HandlerFunc {

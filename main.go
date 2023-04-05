@@ -1,11 +1,11 @@
 package main
 
 import (
-	"awesomeProject1/models"
-	"awesomeProject1/router"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+	"ukrabobus/models"
+	"ukrabobus/router"
 )
 
 func main() {

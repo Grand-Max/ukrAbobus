@@ -1,4 +1,4 @@
-module awesomeProject1
+module ukrabobus
 
 go 1.20
 
