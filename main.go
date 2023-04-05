@@ -27,5 +27,6 @@ func main() {
 	r.POST("/documents", router.CreateDocument(db))
 	r.GET("/tickets", router.GetAllTickets(db))
 	r.POST("/tickets", router.CreateTicket(db))
+	r.POST("/login", router.Login(db))
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
