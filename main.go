@@ -21,11 +21,11 @@ func main() {
 
 	r.GET("/trips", router.GetAllTrips(db))
 	r.POST("/trips", router.CreateTrip(db))
-	r.GET("/user", router.GetAllTrips(db))
-	r.POST("/user", router.CreateTrip(db))
-	r.GET("/trips", router.GetAllTrips(db))
-	r.POST("/trips", router.CreateTrip(db))
-	r.GET("/trips", router.GetAllTrips(db))
-	r.POST("/trips", router.CreateTrip(db))
+	r.GET("/users", router.GetAllUsers(db))
+	r.POST("/users", router.CreateUser(db))
+	r.GET("/documents", router.GetAllDocuments(db))
+	r.POST("/documents", router.CreateDocument(db))
+	r.GET("/tickets", router.GetAllTickets(db))
+	r.POST("/tickets", router.CreateTicket(db))
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
