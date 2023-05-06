@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+	router2 "ukrabobus/handlers/router"
 	"ukrabobus/models"
-	"ukrabobus/router"
 )
 
 func main() {
@@ -19,14 +19,14 @@ func main() {
 		panic("failed to AutoMigrate")
 	}
 
-	r.GET("/trips", router.GetAllTrips(db))
-	r.POST("/trips", router.CreateTrip(db))
-	r.GET("/users", router.GetAllUsers(db))
-	r.POST("/users", router.CreateUser(db))
-	r.GET("/documents", router.GetAllDocuments(db))
-	r.POST("/documents", router.CreateDocument(db))
-	r.GET("/tickets", router.GetAllTickets(db))
-	r.POST("/tickets", router.CreateTicket(db))
-	r.POST("/login", router.Login(db))
+	r.GET("/trips", router2.GetAllTrips(db))
+	r.POST("/trips", router2.CreateTrip(db))
+	r.GET("/users", router2.GetAllUsers(db))
+	r.POST("/users", router2.CreateUser(db))
+	r.GET("/documents", router2.GetAllDocuments(db))
+	r.POST("/documents", router2.CreateDocument(db))
+	r.GET("/tickets", router2.GetAllTickets(db))
+	r.POST("/tickets", router2.CreateTicket(db))
+	r.POST("/login", router2.Login(db))
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

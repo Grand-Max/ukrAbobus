@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
+	tripsService "ukrabobus/service"
 )
 
 func GetAllTrips(db *gorm.DB) gin.HandlerFunc {
@@ -26,7 +27,12 @@ func CreateTrip(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		db.Create(&newTrip)
-		ctx.IndentedJSON(http.StatusCreated, newTrip)
+		if tripsService.IsTripOk(newTrip) {
+			db.Create(&newTrip)
+			ctx.IndentedJSON(http.StatusCreated, newTrip)
+		} else {
+			ctx.Status(400)
+		}
+
 	}
 }

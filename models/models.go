@@ -32,7 +32,6 @@ type Trip struct {
 	CityTo         string
 	ArrivalTime    time.Time
 	DepartureTime  time.Time
-	Date           time.Time
 	NumberOfPlaces uint
 	TransportType  string
 }
