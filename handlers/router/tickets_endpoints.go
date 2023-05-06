@@ -11,7 +11,7 @@ import (
 func GetAllTickets(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var tickets []models.Ticket
-		db.Find(&tickets)
+		db.Joins("User").Joins("Trip").Find(&tickets)
 		ctx.JSON(200, tickets)
 	}
 }
