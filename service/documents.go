@@ -2,7 +2,7 @@ package service
 
 import "ukrabobus/models"
 
-func IsDocumentOk(document models.document) bool {
+func IsDocumentOk(document models.Document) bool {
 	var isOk = true
 
 	if document.Name == "" ||

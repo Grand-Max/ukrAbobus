@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
-	documentsService "ukrabobus/service"
+	services "ukrabobus/service"
 )
 
 func GetAllDocuments(db *gorm.DB) gin.HandlerFunc {
@@ -27,7 +27,7 @@ func CreateDocument(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if documentService.IsDocumentOk(newDocument) {
+		if services.IsDocumentOk(newDocument) {
 			db.Create(&newDocument)
 			ctx.IndentedJSON(http.StatusCreated, newDocument)
 		} else {
