@@ -6,13 +6,18 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
+	repository "ukrabobus/repository"
+	services "ukrabobus/service"
 )
 
 func GetAllTickets(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var tickets []models.Ticket
-		db.Joins("User").Joins("Trip").Find(&tickets)
-		ctx.JSON(200, tickets)
+		tickets, err := repository.GetAllTickets(db)
+		if err != nil {
+			ctx.JSON(200, tickets)
+			return
+		}
+		ctx.Status(500)
 	}
 }
 
@@ -25,8 +30,15 @@ func CreateTicket(db *gorm.DB) gin.HandlerFunc {
 			ctx.Status(http.StatusBadRequest)
 			return
 		}
-
-		db.Create(&newTicket)
+		if !services.IsTicketOk(newTicket) {
+			ctx.Status(400)
+			return
+		}
+		err := repository.CreateTicket(db, &newTicket)
+		if err != nil {
+			ctx.Status(500)
+			return
+		}
 		ctx.IndentedJSON(http.StatusCreated, newTicket)
 	}
 }
