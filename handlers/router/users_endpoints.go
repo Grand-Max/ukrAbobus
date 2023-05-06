@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
+	services "ukrabobus/service"
 )
 
 func GetAllUsers(db *gorm.DB) gin.HandlerFunc {
@@ -25,8 +26,12 @@ func CreateUser(db *gorm.DB) gin.HandlerFunc {
 			ctx.Status(http.StatusBadRequest)
 			return
 		}
+		if services.IsUserOk(newUser) {
+			db.Create(&newUser)
+			ctx.IndentedJSON(http.StatusCreated, newUser)
+		} else {
+			ctx.Status(400)
+		}
 
-		db.Create(&newUser)
-		ctx.IndentedJSON(http.StatusCreated, newUser)
 	}
 }
