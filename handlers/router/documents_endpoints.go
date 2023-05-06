@@ -26,7 +26,12 @@ func CreateDocument(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		db.Create(&newDocument)
-		ctx.IndentedJSON(http.StatusCreated, newDocument)
+		if tripsService.IsDocumentOk(newTrip) {
+			db.Create(&newDocument)
+			ctx.IndentedJSON(http.StatusCreated, newDocument)
+		} else {
+			ctx.Status(400)
+		}
+
 	}
 }
