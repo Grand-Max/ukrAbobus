@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
-	repository "ukrabobus/repository"
+	"ukrabobus/repository"
 	services "ukrabobus/service"
 )
 

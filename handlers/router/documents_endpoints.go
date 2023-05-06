@@ -6,14 +6,18 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
+	"ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
 func GetAllDocuments(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var documents []models.Document
-		db.Find(&documents)
-		ctx.JSON(200, documents)
+		documents, err := repository.GetAllDocuments(db)
+		if err != nil {
+			ctx.JSON(200, documents)
+			return
+		}
+		ctx.Status(500)
 	}
 }
 
@@ -27,11 +31,14 @@ func CreateDocument(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if services.IsDocumentOk(newDocument) {
-			db.Create(&newDocument)
-			ctx.IndentedJSON(http.StatusCreated, newDocument)
-		} else {
+		if !services.IsDocumentOk(newDocument) {
 			ctx.Status(400)
+			return
+		}
+		err := repository.CreateDocument(db, &newDocument)
+		if err != nil {
+			ctx.Status(500)
+			return
 		}
 
 	}
