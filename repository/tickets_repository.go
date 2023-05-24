@@ -5,13 +5,23 @@ import (
 	"ukrabobus/models"
 )
 
-func CreateTicket(db *gorm.DB, newTicket *models.Ticket) error {
-	db.Create(&newTicket)
+type TicketRepo struct {
+	db *gorm.DB
+}
+
+func NewTicketRepo(database *gorm.DB) *TicketRepo {
+	return &TicketRepo{
+		db: database,
+	}
+}
+
+func (repo *TicketRepo) CreateTicket(newTicket *models.Ticket) error {
+	repo.db.Create(&newTicket)
 	return nil
 }
 
-func GetAllTickets(db *gorm.DB) ([]models.Ticket, error) {
+func (repo *TicketRepo) GetAllTickets() ([]models.Ticket, error) {
 	var tickets []models.Ticket
-	db.Joins("User").Joins("Trip").Find(&tickets)
+	repo.db.Joins("User").Joins("Trip").Find(&tickets)
 	return tickets, nil
 }

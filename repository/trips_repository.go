@@ -5,13 +5,23 @@ import (
 	"ukrabobus/models"
 )
 
-func CreateTrip(db *gorm.DB, newTrip *models.Trip) error {
-	db.Create(&newTrip)
+type TripRepo struct {
+	db *gorm.DB
+}
+
+func NewTripRepo(database *gorm.DB) *TripRepo {
+	return &TripRepo{
+		db: database,
+	}
+}
+
+func (repo *TripRepo) CreateTrip(newTrip *models.Trip) error {
+	repo.db.Create(&newTrip)
 	return nil
 }
 
-func GetAllTrips(db *gorm.DB) ([]models.Trip, error) {
+func (repo *TripRepo) GetAllTrips() ([]models.Trip, error) {
 	var trips []models.Trip
-	db.Find(&trips)
+	repo.db.Find(&trips)
 	return trips, nil
 }

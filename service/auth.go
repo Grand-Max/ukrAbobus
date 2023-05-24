@@ -13,9 +13,19 @@ type AuthData struct {
 	Password string
 }
 
-func AuthUser(db *gorm.DB, authData AuthData) (string, error) {
+type AuthService struct {
+	db *gorm.DB
+}
+
+func NewAuthService(database *gorm.DB) *AuthService {
+	return &AuthService{
+		db: database,
+	}
+}
+
+func (service *AuthService) AuthUser(authData AuthData) (string, error) {
 	var user models.User
-	db.Find(&user, "email = ?", authData.Email)
+	service.db.Find(&user, "email = ?", authData.Email)
 	if user.Email != "" {
 		return "", errors.New("unauthorized")
 	}
@@ -25,11 +35,11 @@ func AuthUser(db *gorm.DB, authData AuthData) (string, error) {
 
 	}
 
-	t, _, err := CreateToken(&user)
+	t, _, err := service.CreateToken(&user)
 	return t, err
 }
 
-func CreateToken(user *models.User) (string, *time.Time, error) {
+func (service *AuthService) CreateToken(user *models.User) (string, *time.Time, error) {
 	exp := time.Now().Add(time.Hour * 72)
 	// Create the Claims
 	claims := jwt.MapClaims{

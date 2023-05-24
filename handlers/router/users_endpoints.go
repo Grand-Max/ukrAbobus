@@ -6,13 +6,15 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
-	"ukrabobus/repository"
+	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
 func GetAllUsers(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		users, err := repository.GetAllUsers(db)
+		var userRepo = repos.NewUserRepo(db)
+
+		users, err := userRepo.GetAllUsers()
 		if err != nil {
 			ctx.JSON(200, users)
 			return
@@ -24,6 +26,7 @@ func GetAllUsers(db *gorm.DB) gin.HandlerFunc {
 func CreateUser(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newUser models.User
+		var userRepo = repos.NewUserRepo(db)
 
 		if err := ctx.BindJSON(&newUser); err != nil {
 			fmt.Println("Bind error")
@@ -34,7 +37,7 @@ func CreateUser(db *gorm.DB) gin.HandlerFunc {
 			ctx.Status(400)
 			return
 		}
-		err := repository.CreateUser(db, &newUser)
+		err := userRepo.CreateUser(&newUser)
 		if err != nil {
 			ctx.Status(500)
 			return

@@ -5,13 +5,23 @@ import (
 	"ukrabobus/models"
 )
 
-func CreateUser(db *gorm.DB, newUser *models.User) error {
-	db.Create(&newUser)
+type UserRepo struct {
+	db *gorm.DB
+}
+
+func NewUserRepo(database *gorm.DB) *UserRepo {
+	return &UserRepo{
+		db: database,
+	}
+}
+
+func (repo *UserRepo) CreateUser(newUser *models.User) error {
+	repo.db.Create(&newUser)
 	return nil
 }
 
-func GetAllUsers(db *gorm.DB) ([]models.User, error) {
+func (repo *UserRepo) GetAllUsers() ([]models.User, error) {
 	var users []models.User
-	db.Joins("Document").Find(&users)
+	repo.db.Joins("Document").Find(&users)
 	return users, nil
 }

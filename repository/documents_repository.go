@@ -5,13 +5,23 @@ import (
 	"ukrabobus/models"
 )
 
-func CreateDocument(db *gorm.DB, newDocument *models.Document) error {
-	db.Create(&newDocument)
+type DocumentRepo struct {
+	db *gorm.DB
+}
+
+func NewDocumentRepo(database *gorm.DB) *DocumentRepo {
+	return &DocumentRepo{
+		db: database,
+	}
+}
+
+func (repo *DocumentRepo) CreateDocument(newDocument *models.Document) error {
+	repo.db.Create(&newDocument)
 	return nil
 }
 
-func GetAllDocuments(db *gorm.DB) ([]models.Document, error) {
+func (repo *DocumentRepo) GetAllDocuments() ([]models.Document, error) {
 	var documents []models.Document
-	db.Find(&documents)
+	repo.db.Find(&documents)
 	return documents, nil
 }

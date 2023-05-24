@@ -6,13 +6,14 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
-	"ukrabobus/repository"
+	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
 func GetAllDocuments(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		documents, err := repository.GetAllDocuments(db)
+		var docsRepo = repos.NewDocumentRepo(db)
+		documents, err := docsRepo.GetAllDocuments()
 		if err != nil {
 			ctx.JSON(200, documents)
 			return
@@ -24,6 +25,7 @@ func GetAllDocuments(db *gorm.DB) gin.HandlerFunc {
 func CreateDocument(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newDocument models.Document
+		var docsRepo = repos.NewDocumentRepo(db)
 
 		if err := ctx.BindJSON(&newDocument); err != nil {
 			fmt.Println("Bind error")
@@ -35,7 +37,7 @@ func CreateDocument(db *gorm.DB) gin.HandlerFunc {
 			ctx.Status(400)
 			return
 		}
-		err := repository.CreateDocument(db, &newDocument)
+		err := docsRepo.CreateDocument(&newDocument)
 		if err != nil {
 			ctx.Status(500)
 			return
