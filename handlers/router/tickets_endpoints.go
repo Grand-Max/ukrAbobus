@@ -3,16 +3,14 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 	"ukrabobus/models"
 	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
-func GetAllTickets(db *gorm.DB) gin.HandlerFunc {
+func GetAllTickets(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var ticketRepo = repos.NewTicketRepo(db)
 		tickets, err := ticketRepo.GetAllTickets()
 		if err != nil {
 			ctx.JSON(200, tickets)
@@ -22,10 +20,9 @@ func GetAllTickets(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func CreateTicket(db *gorm.DB) gin.HandlerFunc {
+func CreateTicket(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newTicket models.Ticket
-		var ticketRepo = repos.NewTicketRepo(db)
 
 		if err := ctx.BindJSON(&newTicket); err != nil {
 			fmt.Println("Bind error")

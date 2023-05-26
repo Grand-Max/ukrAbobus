@@ -4,21 +4,28 @@ import (
 	"github.com/gin-gonic/gin"
 	database "ukrabobus/db"
 	router2 "ukrabobus/handlers/router"
+	repos "ukrabobus/repository"
+	services "ukrabobus/service"
 )
 
 func main() {
 	r := gin.Default()
 
 	db := database.CreateDB()
+	var authService = services.NewAuthService(db)
+	var tripsRepo = repos.NewTripRepo(db)
+	var docsRepo = repos.NewDocumentRepo(db)
+	var ticketsRepo = repos.NewTicketRepo(db)
+	var usersRepo = repos.NewUserRepo(db)
 
-	r.GET("/trips", router2.GetAllTrips(db))
-	r.POST("/trips", router2.CreateTrip(db))
-	r.GET("/users", router2.GetAllUsers(db))
-	r.POST("/users", router2.CreateUser(db))
-	r.GET("/documents", router2.GetAllDocuments(db))
-	r.POST("/documents", router2.CreateDocument(db))
-	r.GET("/tickets", router2.GetAllTickets(db))
-	r.POST("/tickets", router2.CreateTicket(db))
-	r.POST("/login", router2.Login(db))
+	r.GET("/trips", router2.GetAllTrips(tripsRepo))
+	r.POST("/trips", router2.CreateTrip(tripsRepo))
+	r.GET("/users", router2.GetAllUsers(usersRepo))
+	r.POST("/users", router2.CreateUser(usersRepo))
+	r.GET("/documents", router2.GetAllDocuments(docsRepo))
+	r.POST("/documents", router2.CreateDocument(docsRepo))
+	r.GET("/tickets", router2.GetAllTickets(ticketsRepo))
+	r.POST("/tickets", router2.CreateTicket(ticketsRepo))
+	r.POST("/login", router2.Login(authService))
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

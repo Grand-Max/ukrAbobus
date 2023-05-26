@@ -3,15 +3,13 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 	services "ukrabobus/service"
 )
 
-func Login(db *gorm.DB) gin.HandlerFunc {
+func Login(authService *services.AuthService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var authData services.AuthData
-		var authService = services.NewAuthService(db)
 
 		if err := ctx.BindJSON(&authData); err != nil {
 			fmt.Println("Bind error")
