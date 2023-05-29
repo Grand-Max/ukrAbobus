@@ -20,7 +20,7 @@ func GetAllDocuments(docsRepo *repos.DocumentRepo) gin.HandlerFunc {
 	}
 }
 
-func CreateDocument(docsRepo *repos.DocumentRepo) gin.HandlerFunc {
+func CreateDocument(service *services.DocumentService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newDocument models.Document
 
@@ -30,11 +30,11 @@ func CreateDocument(docsRepo *repos.DocumentRepo) gin.HandlerFunc {
 			return
 		}
 
-		if !services.IsDocumentOk(newDocument) {
+		if !service.IsDocumentOk(newDocument) {
 			ctx.Status(400)
 			return
 		}
-		err := docsRepo.CreateDocument(&newDocument)
+		err := service.CreateDocument(newDocument)
 		if err != nil {
 			ctx.Status(500)
 			return
