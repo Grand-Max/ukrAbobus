@@ -20,7 +20,7 @@ func GetAllTickets(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
 	}
 }
 
-func CreateTicket(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
+func CreateTicket(service *services.TicketService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newTicket models.Ticket
 
@@ -29,11 +29,11 @@ func CreateTicket(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
 			ctx.Status(http.StatusBadRequest)
 			return
 		}
-		if !services.IsTicketOk(newTicket) {
+		if !service.IsTicketOk(newTicket) {
 			ctx.Status(400)
 			return
 		}
-		err := ticketRepo.CreateTicket(&newTicket)
+		err := service.CreateTicket(newTicket)
 		if err != nil {
 			ctx.Status(500)
 			return

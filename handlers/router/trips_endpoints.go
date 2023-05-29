@@ -21,7 +21,7 @@ func GetAllTrips(tripsRepo *repos.TripRepo) gin.HandlerFunc {
 	}
 }
 
-func CreateTrip(tripsRepo *repos.TripRepo) gin.HandlerFunc {
+func CreateTrip(service *services.TripService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newTrip models.Trip
 
@@ -31,11 +31,11 @@ func CreateTrip(tripsRepo *repos.TripRepo) gin.HandlerFunc {
 			return
 		}
 
-		if !services.IsTripOk(newTrip) {
+		if !service.IsTripOk(newTrip) {
 			ctx.Status(400)
 			return
 		}
-		err := tripsRepo.CreateTrip(&newTrip)
+		err := service.CreateTrip(newTrip)
 		if err != nil {
 			ctx.Status(500)
 			return
