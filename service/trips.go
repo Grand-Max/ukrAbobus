@@ -22,6 +22,11 @@ func (service *TripService) CreateTrip(newTrip models.Trip) error {
 
 }
 
+func (service *TripService) GetAllTrips() ([]models.Trip, error) {
+	trips, err := service.repo.GetAllTrips()
+	return trips, err
+}
+
 func (service *TripService) IsTripOk(trip models.Trip) bool {
 	var isOk = true
 

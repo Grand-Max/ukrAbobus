@@ -22,6 +22,11 @@ func (service *TicketService) CreateTicket(newTicket models.Ticket) error {
 
 }
 
+func (service *TicketService) GetAllTickets() ([]models.Ticket, error) {
+	tickets, err := service.repo.GetAllTickets()
+	return tickets, err
+}
+
 func (service *TicketService) IsTicketOk(ticket models.Ticket) bool {
 	var isOk = true
 

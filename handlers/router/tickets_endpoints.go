@@ -5,11 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ukrabobus/models"
-	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
-func GetAllTickets(ticketRepo *repos.TicketRepo) gin.HandlerFunc {
+func GetAllTickets(ticketRepo *services.TicketService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tickets, err := ticketRepo.GetAllTickets()
 		if err != nil {
