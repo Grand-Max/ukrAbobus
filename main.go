@@ -19,17 +19,18 @@ func main() {
 	var usersRepo = repos.NewUserRepo(db)
 
 	var docsService = services.NewDocsService(docsRepo)
-
+	var tripsService = services.NewTripsService(tripsRepo)
+	var ticketsService = services.NewTicketsService(ticketsRepo)
 	var userService = services.NewUserService(usersRepo)
 
-	r.GET("/trips", router2.GetAllTrips(tripsRepo))
-	r.POST("/trips", router2.CreateTrip(tripsRepo))
+	r.GET("/trips", router2.GetAllTrips(tripsService))
+	r.POST("/trips", router2.CreateTrip(tripsService))
 	r.GET("/users", router2.GetAllUsers(userService))
 	r.POST("/users", router2.CreateUser(userService))
 	r.GET("/documents", router2.GetAllDocuments(docsService))
 	r.POST("/documents", router2.CreateDocument(docsService))
-	r.GET("/tickets", router2.GetAllTickets(ticketsRepo))
-	r.POST("/tickets", router2.CreateTicket(ticketsRepo))
+	r.GET("/tickets", router2.GetAllTickets(ticketsService))
+	r.POST("/tickets", router2.CreateTicket(ticketsService))
 	r.POST("/login", router2.Login(authService))
 	err := r.Run()
 	if err != nil {

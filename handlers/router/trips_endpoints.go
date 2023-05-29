@@ -5,11 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ukrabobus/models"
-	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
-func GetAllTrips(tripsRepo *repos.TripRepo) gin.HandlerFunc {
+func GetAllTrips(tripsRepo *services.TripService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		trips, err := tripsRepo.GetAllTrips()
@@ -21,7 +20,7 @@ func GetAllTrips(tripsRepo *repos.TripRepo) gin.HandlerFunc {
 	}
 }
 
-func CreateTrip(tripsRepo *repos.TripRepo) gin.HandlerFunc {
+func CreateTrip(service *services.TripService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newTrip models.Trip
 
@@ -31,11 +30,11 @@ func CreateTrip(tripsRepo *repos.TripRepo) gin.HandlerFunc {
 			return
 		}
 
-		if !services.IsTripOk(newTrip) {
+		if !service.IsTripOk(newTrip) {
 			ctx.Status(400)
 			return
 		}
-		err := tripsRepo.CreateTrip(&newTrip)
+		err := service.CreateTrip(newTrip)
 		if err != nil {
 			ctx.Status(500)
 			return
