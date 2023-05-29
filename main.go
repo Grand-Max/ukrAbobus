@@ -24,7 +24,7 @@ func main() {
 	r.POST("/trips", router2.CreateTrip(tripsRepo))
 	r.GET("/users", router2.GetAllUsers(usersRepo))
 	r.POST("/users", router2.CreateUser(usersRepo))
-	r.GET("/documents", router2.GetAllDocuments(docsRepo))
+	r.GET("/documents", router2.GetAllDocuments(docsService))
 	r.POST("/documents", router2.CreateDocument(docsService))
 	r.GET("/tickets", router2.GetAllTickets(ticketsRepo))
 	r.POST("/tickets", router2.CreateTicket(ticketsRepo))

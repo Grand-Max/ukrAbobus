@@ -5,13 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ukrabobus/models"
-	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
-func GetAllDocuments(docsRepo *repos.DocumentRepo) gin.HandlerFunc {
+func GetAllDocuments(service *services.DocumentService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		documents, err := docsRepo.GetAllDocuments()
+		documents, err := service.GetAllDocuments()
 		if err != nil {
 			ctx.JSON(200, documents)
 			return
