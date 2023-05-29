@@ -5,14 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ukrabobus/models"
-	repos "ukrabobus/repository"
 	services "ukrabobus/service"
 )
 
-func GetAllUsers(usersRepo *repos.UserRepo) gin.HandlerFunc {
+func GetAllUsers(usersService *services.UserService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
-		users, err := usersRepo.GetAllUsers()
+		users, err := usersService.GetAllUsers()
 		if err != nil {
 			ctx.JSON(200, users)
 			return
@@ -21,7 +20,7 @@ func GetAllUsers(usersRepo *repos.UserRepo) gin.HandlerFunc {
 	}
 }
 
-func CreateUser(usersRepo *repos.UserRepo) gin.HandlerFunc {
+func CreateUser(usersService *services.UserService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var newUser models.User
 
@@ -30,11 +29,11 @@ func CreateUser(usersRepo *repos.UserRepo) gin.HandlerFunc {
 			ctx.Status(http.StatusBadRequest)
 			return
 		}
-		if !services.IsUserOk(newUser) {
+		if !usersService.IsUserOk(newUser) {
 			ctx.Status(400)
 			return
 		}
-		err := usersRepo.CreateUser(&newUser)
+		err := usersService.CreateUser(newUser)
 		if err != nil {
 			ctx.Status(500)
 			return
