@@ -16,10 +16,13 @@ func NewDocsService(docRepo *repos.DocumentRepo) *DocumentService {
 }
 
 func (service *DocumentService) CreateDocument(newDocument models.Document) error {
-
 	err := service.repo.CreateDocument(&newDocument)
 	return err
+}
 
+func (service *DocumentService) GetAllDocuments() ([]models.Document, error) {
+	docs, err := service.repo.GetAllDocuments()
+	return docs, err
 }
 
 func (service *DocumentService) IsDocumentOk(document models.Document) bool {
