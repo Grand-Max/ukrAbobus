@@ -25,3 +25,9 @@ func (repo *TripRepo) GetAllTrips() ([]models.Trip, error) {
 	repo.db.Find(&trips)
 	return trips, nil
 }
+
+func (repo *TripRepo) GetTripById(id uint) (models.Trip, error) {
+	var trip models.Trip
+	repo.db.Find(&trip, "trips_id = ?", id)
+	return trip, nil
+}

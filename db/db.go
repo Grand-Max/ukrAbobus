@@ -11,10 +11,15 @@ func CreateDB() *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	err = db.AutoMigrate(&models.User{}, &models.Ticket{}, &models.Document{}, &models.Trip{})
+	err = AutoMigrate(db)
 	if err != nil {
 		panic("failed to AutoMigrate")
 	}
 	return db
 
+}
+
+func AutoMigrate(db *gorm.DB) error {
+	err := db.AutoMigrate(&models.User{}, &models.Ticket{}, &models.Document{}, &models.Trip{})
+	return err
 }
