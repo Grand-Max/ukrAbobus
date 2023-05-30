@@ -12,7 +12,7 @@ func GetAllUsers(usersService *services.UserService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		users, err := usersService.GetAllUsers()
-		if err != nil {
+		if err == nil {
 			ctx.JSON(200, users)
 			return
 		}

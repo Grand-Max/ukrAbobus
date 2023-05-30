@@ -11,7 +11,7 @@ import (
 func GetAllDocuments(service *services.DocumentService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		documents, err := service.GetAllDocuments()
-		if err != nil {
+		if err == nil {
 			ctx.JSON(200, documents)
 			return
 		}

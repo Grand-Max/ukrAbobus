@@ -12,7 +12,7 @@ func GetAllTrips(tripsRepo *services.TripService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		trips, err := tripsRepo.GetAllTrips()
-		if err != nil {
+		if err == nil {
 			ctx.JSON(200, trips)
 			return
 		}

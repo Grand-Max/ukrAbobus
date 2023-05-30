@@ -18,7 +18,7 @@ func Login(authService *services.AuthService) gin.HandlerFunc {
 		}
 		token, err := authService.AuthUser(authData)
 
-		if err == nil {
+		if err != nil {
 			fmt.Println("Bind error")
 			ctx.Status(http.StatusBadRequest)
 			return
