@@ -2,7 +2,6 @@ package test
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/glebarez/sqlite"
 	"github.com/stretchr/testify/assert"
@@ -12,7 +11,7 @@ import (
 	"reflect"
 	"testing"
 	"time"
-	models "ukrabobus/models"
+	"ukrabobus/models"
 	repos "ukrabobus/repository"
 )
 
@@ -46,7 +45,7 @@ func CreateFakeDB(t *testing.T) (*gorm.DB, error) {
 	return gormDB, err
 }
 
-func TestGetCreate(t *testing.T) {
+func TestTripCreate(t *testing.T) {
 	var db, err = CreateFakeDB(t)
 	if err != nil {
 		t.Errorf("failed to create fake db: %v", err)
@@ -64,23 +63,96 @@ func TestGetCreate(t *testing.T) {
 
 	var tripRepo = repos.NewTripRepo(db)
 
-	t.Run("create and get new order", func(t *testing.T) {
+	t.Run("create and get new trip", func(t *testing.T) {
 		var err = tripRepo.CreateTrip(newTrip)
 
 		if err != nil {
-			t.Errorf("failed to creare order with error: %v", err)
+			t.Errorf("failed to creare trip with error: %v", err)
 		}
 
-		fmt.Println(tripRepo.GetAllTrips())
-		fmt.Println(newTrip)
 		trip, err := tripRepo.GetTripById(newTrip.TripsID)
 		if err != nil {
-			t.Errorf("failed to get order with error: %v", err)
+			t.Errorf("failed to get trip with error: %v", err)
 		}
-		fmt.Println(trip)
 
 		if !reflect.DeepEqual(newTrip, &trip) {
-			t.Errorf("order data is corrupted; actual: %v, expected: %v", trip, newTrip)
+			t.Errorf("trip data is corrupted; actual: %v, expected: %v", trip, newTrip)
+
+		}
+	})
+}
+
+func TestUserCreate(t *testing.T) {
+	var db, err = CreateFakeDB(t)
+	if err != nil {
+		t.Errorf("failed to create fake db: %v", err)
+	}
+
+	newUser := &models.User{
+		UserID:     78,
+		FirstName:  "1",
+		LastName:   "2",
+		Email:      "3",
+		Password:   "4",
+		IsAdmin:    false,
+		DocumentID: 1,
+	}
+
+	var userRepo = repos.NewUserRepo(db)
+
+	t.Run("create and get new user", func(t *testing.T) {
+		var err = userRepo.CreateUser(newUser)
+
+		if err != nil {
+			t.Errorf("failed to creare user with error: %v", err)
+		}
+
+		err = userRepo.DeleteUser(newUser)
+		if err != nil {
+			t.Errorf("failed to delete user with error: %v", err)
+		}
+		var user2 models.User
+
+		user2, err = userRepo.GetUserById(newUser.UserID)
+		if err != nil {
+			t.Errorf("failed to get user with error: %v", err)
+		}
+		if user2.UserID != 0 {
+			t.Errorf("failed to delete user with error: %v", err)
+		}
+
+	})
+}
+
+func TestDocumentUpdate(t *testing.T) {
+	var db, err = CreateFakeDB(t)
+	if err != nil {
+		t.Errorf("failed to create fake db: %v", err)
+	}
+
+	newDocument := &models.Document{
+		DocumentID:  26,
+		Name:        "testName",
+		Description: "testDescription",
+		Discount:    0.1,
+	}
+
+	var documentRepo = repos.NewDocumentRepo(db)
+
+	t.Run("create and get new document", func(t *testing.T) {
+		var err = documentRepo.CreateDocument(newDocument)
+
+		if err != nil {
+			t.Errorf("failed to creare document with error: %v", err)
+		}
+
+		document, err := documentRepo.UpdateDocument(newDocument, "dd", "ff", 1)
+		if err != nil {
+			t.Errorf("failed to update document with error: %v", err)
+		}
+
+		if reflect.DeepEqual(newDocument, document) {
+			t.Errorf("document data is corrupted; actual: %v, expected: %v", document, newDocument)
 
 		}
 	})

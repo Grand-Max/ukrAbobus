@@ -25,3 +25,14 @@ func (repo *DocumentRepo) GetAllDocuments() ([]models.Document, error) {
 	repo.db.Find(&documents)
 	return documents, nil
 }
+
+func (repo *DocumentRepo) GetDocumentById(id uint) (models.Document, error) {
+	var document models.Document
+	repo.db.Find(&document, "document_id = ?", id)
+	return document, nil
+}
+
+func (repo *DocumentRepo) UpdateDocument(document *models.Document, name string, description string, discount float64) (models.Document, error) {
+	repo.db.Model(&document).UpdateColumns(models.Document{Name: name, Description: description, Discount: discount})
+	return *document, nil
+}

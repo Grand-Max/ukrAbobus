@@ -25,3 +25,14 @@ func (repo *UserRepo) GetAllUsers() ([]models.User, error) {
 	repo.db.Joins("Document").Find(&users)
 	return users, nil
 }
+
+func (repo *UserRepo) GetUserById(id uint) (models.User, error) {
+	var user models.User
+	repo.db.Find(&user, "user_id = ?", id)
+	return user, nil
+}
+
+func (repo *UserRepo) DeleteUser(user *models.User) error {
+	repo.db.Delete(&user)
+	return nil
+}
