@@ -34,21 +34,42 @@ func TestAll(t *testing.T) {
 	}
 
 	var tripsRepo = repos.NewTripRepo(db)
+	var docsRepo = repos.NewDocumentRepo(db)
+	var usersRepo = repos.NewUserRepo(db)
+
+	var docsService = services.NewDocsService(docsRepo)
 	var tripsService = services.NewTripsService(tripsRepo)
+	var userService = services.NewUserService(usersRepo)
 
 	r := gin.Default()
 	r.GET("/trips", router2.GetAllTrips(tripsService))
 	r.POST("/trips", router2.CreateTrip(tripsService))
+	r.GET("/users", router2.GetAllUsers(userService))
+	r.POST("/users", router2.CreateUser(userService))
+	r.GET("/documents", router2.GetAllDocuments(docsService))
+	r.POST("/documents", router2.CreateDocument(docsService))
 
 	ts := httptest.NewServer(r)
 	defer ts.Close()
 
 	apitest.New().
 		Handler(r).
-		Get("/trips").
-		//JSON(`{"email": "a@b.c", "password": "11111111"}`).
+		Post("/trips").
+		JSON("{ \"CityFrom\": \"Horokhiv\", \"CityTo\": \"Lviv\", \"ArrivalTime\": \"2023-05-06T00:00:00Z\", \"DepartureTime\": \"2023-05-07T00:00:00Z\", \"NumberOfPlaces\": 50, \"TransportType\": \"Train\"}").
 		Expect(t).
-		//CookiePresent("token").
+		Status(http.StatusCreated).
+		End()
+
+	apitest.New().
+		Handler(r).
+		Get("/users").
+		Expect(t).
+		Status(http.StatusOK).
+		End()
+	apitest.New().
+		Handler(r).
+		Get("/documents").
+		Expect(t).
 		Status(http.StatusOK).
 		End()
 }
