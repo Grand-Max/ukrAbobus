@@ -39,6 +39,7 @@ func CreateTrip(service *services.TripService) gin.HandlerFunc {
 			ctx.Status(500)
 			return
 		}
+		ctx.Status(http.StatusCreated)
 
 	}
 }
