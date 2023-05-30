@@ -7,6 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/glebarez/sqlite v1.7.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/steinfletcher/apitest v1.5.15
 	github.com/stretchr/testify v1.8.2
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1

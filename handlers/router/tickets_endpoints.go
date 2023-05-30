@@ -11,7 +11,7 @@ import (
 func GetAllTickets(ticketRepo *services.TicketService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tickets, err := ticketRepo.GetAllTickets()
-		if err != nil {
+		if err == nil {
 			ctx.JSON(200, tickets)
 			return
 		}
